@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Echo: Movement Translation from Competition Dance to 3D Sculpture
+    </title>
+    <style>
+      :root {
+        --primary-color: #5fafff;
+        --secondary-color: #384b4d;
+        --dark-color: #121212;
+        --light-color: #f5f5f5;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: var(--dark-color);
+        background-color: var(--light-color);
+      }
+
+      nav {
+        background-color: var(--dark-color);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+      }
+
+      nav ul {
+        list-style: none;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+        padding: 0.5rem 0;
+      }
+
+      nav ul li {
+        padding: 0.5rem 1rem;
+        white-space: nowrap;
+      }
+
+      nav ul li a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+
+      nav ul li a:hover {
+        color: var(--secondary-color);
+      }
+
+      header {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        color: white;
+        text-align: center;
+        padding: 2rem 0;
+      }
+
+      section {
+        padding: 3rem 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .hero {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 2rem;
+      }
+
+      .hero-image {
+        width: 100%;
+        max-width: 800px;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+
+      h2 {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        color: var(--primary-color);
+      }
+
+      p {
+        margin-bottom: 1.5rem;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+
+      .card {
+        background-color: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+      }
+
+      .card-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+      }
+
+      .card-content {
+        padding: 1.5rem;
+      }
+
+      .process-steps {
+        counter-reset: step-counter;
+        list-style: none;
+        margin: 2rem 0;
+      }
+
+      .process-steps li {
+        position: relative;
+        padding: 1rem 1rem 1rem 3rem;
+        margin-bottom: 1rem;
+        background-color: white;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      .process-steps li::before {
+        content: counter(step-counter);
+        counter-increment: step-counter;
+        position: absolute;
+        left: -15px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+      }
+
+      .video-container {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        margin: 2rem 0;
+      }
+
+      /* Updated for vertical videos */
+      .vertical-video {
+        padding-top: 177.78%; /* 9:16 Aspect Ratio */
+        max-width: 450px;
+        margin: 0 auto;
+      }
+
+      .horizontal-video {
+        padding-top: 56.25%; /* 16:9 Aspect Ratio */
+      }
+
+      .responsive-iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+
+      .competition-highlight {
+        background-color: rgba(98, 0, 234, 0.05);
+        border-left: 4px solid var(--primary-color);
+        padding: 1rem;
+        margin: 1.5rem 0;
+      }
+
+      footer {
+        background-color: var(--dark-color);
+        color: white;
+        text-align: center;
+        padding: 2rem;
+        margin-top: 2rem;
+      }
+
+      .timeline {
+        position: relative;
+        margin: 3rem 0;
+        padding-left: 2rem;
+      }
+
+      .timeline::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 4px;
+        background-color: var(--secondary-color);
+      }
+
+      .timeline-item {
+        position: relative;
+        margin-bottom: 2rem;
+        padding-left: 1.5rem;
+      }
+
+      .timeline-item::before {
+        content: "";
+        position: absolute;
+        left: -10px;
+        top: 0;
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        background-color: var(--primary-color);
+      }
+
+      .video-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0;
+      }
+
+      .caption {
+        text-align: center;
+        font-style: italic;
+        margin-top: 0.5rem;
+      }
+
+      @media (max-width: 600px) {
+        h1 {
+          font-size: 2rem;
+        }
+
+        h2 {
+          font-size: 1.5rem;
+        }
+
+        /* Keep navigation horizontal but make font smaller and padding tighter */
+        nav ul {
+          justify-content: space-around;
+          padding: 0;
+        }
+
+        nav ul li {
+          padding: 0.5rem 0.3rem;
+          font-size: 0.9rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="#concept">Concept</a></li>
+        <li><a href="#competitions">Competition Videos</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#tech">Technology</a></li>
+        <li><a href="#documentation">Documentation</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+      </ul>
+    </nav>
+
+    <header>
+      <h1>Echo: Dance Movement to 3D Sculpture</h1>
+      <p>Senior Capstone Project by Elizabeth Spann</p>
+    </header>
+
+    <main>
+      <section class="hero">
+        <img
+          src="/api/placeholder/800/450"
+          alt="Echo sculpture displaying competition dance movement through LED lights in acrylic tube"
+          class="hero-image"
+        />
+        <div>
+          <h2>Translating Competition Dance from 2D to 3D Space</h2>
+          <p>
+            A sculptural exploration capturing the essence of dance movement
+            performance through light and form
+          </p>
+        </div>
+      </section>
+
+      <section id="concept">
+        <h2>Concept</h2>
+        <p>
+          Echo explores the translation of two-dimensional movement captured in
+          competitive dance videos into a three-dimensional sculptural form. By
+          analyzing my own past competition performances, the project extracts
+          motion patterns and transforms them into illuminated pathways within
+          an acrylic tube structure.
+        </p>
+
+        <div class="competition-highlight">
+          <p>
+            <strong>Personal Connection:</strong> As a competitive dancer, Echo
+            allows me to preserve and transform my most significant performances
+            into a permanent artistic installation, giving new life to ephemeral
+            moments of athletic and artistic achievement.
+          </p>
+        </div>
+
+        <p>
+          The sculpture serves as a physical representation of temporal
+          movement, freezing time and allowing the viewer to experience dance in
+          a new dimension. The LED lighting sequence recreates the flow, rhythm,
+          and energy of the original performances, creating a conversation
+          between competition recordings, physical space, and light.
+        </p>
+
+        <div class="grid">
+          <div class="card">
+            <img
+              src="Documentation/_9740e44b-1933-4d67-8d28-cf9043087ff8.jpeg"
+              alt="Conceptual drawing of Echo sculpture"
+              class="card-image"
+            />
+            <div class="card-content">
+              <h3>Conceptual Foundation</h3>
+              <p>
+                Echo draws inspiration from chronophotography and light painting
+                techniques, capturing movement traces that would otherwise be
+                invisible to the naked eye.
+              </p>
+            </div>
+          </div>
+          <div class="card">
+            <img
+              src="Documentation/MotionCapture.mp4"
+              alt="Original competition dance video"
+              class="card-image"
+            />
+            <div class="card-content">
+              <h3>Source Material</h3>
+              <p>
+                Multiple vertical competition videos from different venues
+                captured my performances across various styles and
+                choreographies.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="competitions">
+        <h2>Competition Videos as Source Material</h2>
+        <p>
+          Echo utilizes my archive of competition videos spanning multiple
+          seasons and styles, primarily in vertical 9:16 format:
+        </p>
+
+        <div class="timeline">
+          <div class="timeline-item">
+            <h3>Regional Championships (2023)</h3>
+            <p>
+              Contemporary solo performance featuring extended floor work and
+              aerial movements that create distinctive motion patterns.
+            </p>
+            <div class="video-container vertical-video">
+              <iframe
+                class="responsive-iframe"
+                src="about:blank"
+                frameborder="0"
+                allowfullscreen
+              ></iframe>
+              <p class="caption">
+                Video placeholder for Regional Championships solo
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <h3>National Finals (2024)</h3>
+            <p>
+              Jazz trio with synchronized movement sequences and complex spatial
+              formations that translate powerfully to 3D representation.
+            </p>
+            <div class="video-container vertical-video">
+              <iframe
+                class="responsive-iframe"
+                src="about:blank"
+                frameborder="0"
+                allowfullscreen
+              ></iframe>
+              <p class="caption">Video placeholder for National Finals trio</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <h3>Invitational Showcase (2024)</h3>
+            <p>
+              Modern solo with extensive use of level changes and directional
+              shifts which provided rich data for Echo's design.
+            </p>
+            <div class="video-container vertical-video">
+              <iframe
+                class="responsive-iframe"
+                src="about:blank"
+                frameborder="0"
+                allowfullscreen
+              ></iframe>
+              <p class="caption">
+                Video placeholder for Invitational Showcase solo
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="competition-highlight">
+          <p>
+            <strong>Selection Process:</strong> Each vertical competition video
+            was analyzed for distinctive movement qualities, spatial pathways,
+            and emotional resonance. Echo incorporates elements from multiple
+            performances, creating a composite representation of my competitive
+            dance journey.
+          </p>
+        </div>
+      </section>
+
+      <section id="process">
+        <h2>Process</h2>
+        <p>
+          The creation of Echo involved several interdisciplinary steps,
+          combining video analysis of competition footage, digital modeling,
+          fabrication, and interactive lighting design.
+        </p>
+
+        <ol class="process-steps">
+          <li>
+            <strong>Competition Video Collection:</strong> Gathering and
+            digitizing vertical (9:16) recordings from various competitions
+            spanning my dance career.
+          </li>
+          <li>
+            <strong>Video Preparation:</strong> Editing competition footage to
+            isolate complete routines and standardize viewing angles when
+            possible.
+          </li>
+          <li>
+            <strong>Motion Analysis:</strong> Using motion tracking software to
+            extract movement pathways and key points from the competition
+            videos.
+          </li>
+          <li>
+            <strong>Pattern Identification:</strong> Identifying signature
+            movements and recurring patterns across different performances.
+          </li>
+          <li>
+            <strong>Digital Modeling:</strong> Transforming the 2D competition
+            movement data into 3D trajectories through computational design.
+          </li>
+          <li>
+            <strong>Acrylic Fabrication:</strong> Bending and forming acrylic
+            tubes to match the designed pathways.
+          </li>
+          <li>
+            <strong>LED Implementation:</strong> Embedding programmable LED
+            strips within the tubes.
+          </li>
+          <li>
+            <strong>Choreographic Programming:</strong> Creating lighting
+            sequences that recreate the temporal aspects and dynamics of the
+            original competition performances.
+          </li>
+          <li>
+            <strong>Installation:</strong> Mounting and presenting Echo in a way
+            that invites viewer engagement with the preserved competition
+            movements.
+          </li>
+        </ol>
+
+        <h3>Acrylic Bending Process</h3>
+        <p>
+          A significant technical challenge in creating Echo was the precise
+          bending of acrylic tubes to match the pathways extracted from
+          competition videos:
+        </p>
+
+        <div class="video-grid">
+          <div class="video-container horizontal-video">
+            <iframe
+              class="responsive-iframe"
+              src="about:blank"
+              frameborder="0"
+              allowfullscreen
+            ></iframe>
+            <p class="caption">Heat-bending acrylic tubes using a custom jig</p>
+          </div>
+          <div class="video-container horizontal-video">
+            <iframe
+              class="responsive-iframe"
+              src="about:blank"
+              frameborder="0"
+              allowfullscreen
+            ></iframe>
+            <p class="caption">Testing structural integrity of complex bends</p>
+          </div>
+        </div>
+
+        <h3>Programming and Coding</h3>
+        <p>
+          The LED sequences that represent competition dance movements required
+          extensive coding and testing:
+        </p>
+
+        <div class="video-grid">
+          <div class="video-container horizontal-video">
+            <iframe
+              class="responsive-iframe"
+              src="about:blank"
+              frameborder="0"
+              allowfullscreen
+            ></iframe>
+            <p class="caption">Programming Arduino to control LED patterns</p>
+          </div>
+          <div class="video-container horizontal-video">
+            <iframe
+              class="responsive-iframe"
+              src="about:blank"
+              frameborder="0"
+              allowfullscreen
+            ></iframe>
+            <p class="caption">
+              Testing synchronization between video and lights
+            </p>
+          </div>
+        </div>
+
+        <div class="competition-highlight">
+          <p>
+            <strong>Technical Challenge:</strong> Converting vertical video
+            competition footage presented unique challenges for motion tracking.
+            Custom software was developed to account for the 9:16 aspect ratio
+            and extract meaningful movement data.
+          </p>
+        </div>
+
+        <div class="video-container horizontal-video">
+          <iframe
+            class="responsive-iframe"
+            src="about:blank"
+            frameborder="0"
+            allowfullscreen
+          ></iframe>
+          <p class="caption">Time-lapse of Echo's complete creation process</p>
+        </div>
+      </section>
+
+      <section id="tech">
+        <h2>Technology</h2>
+        <p>
+          Echo integrates several technical components to achieve the
+          translation from competition video to physical sculpture:
+        </p>
+
+        <div class="grid">
+          <div class="card">
+            <img
+              src="/api/placeholder/400/200"
+              alt="Hardware components"
+              class="card-image"
+            />
+            <div class="card-content">
+              <h3>Hardware</h3>
+              <ul>
+                <li>Clear acrylic tubes (various diameters)</li>
+                <li>Programmable LED strips (WS2812B)</li>
+                <li>Arduino/Raspberry Pi controller</li>
+                <li>Custom mounting system</li>
+                <li>Power supply unit</li>
+                <li>Custom acrylic bending apparatus</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card">
+            <img
+              src="/api/placeholder/400/200"
+              alt="Software interface"
+              class="card-image"
+            />
+            <div class="card-content">
+              <h3>Software</h3>
+              <ul>
+                <li>Vertical competition video enhancement tools</li>
+                <li>Motion tracking software with 9:16 ratio support</li>
+                <li>3D modeling program</li>
+                <li>Custom LED control script</li>
+                <li>Arduino IDE with FastLED library</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card">
+            <img
+              src="/api/placeholder/400/200"
+              alt="Motion data visualization"
+              class="card-image"
+            />
+            <div class="card-content">
+              <h3>Data Processing</h3>
+              <p>
+                Competition movement data was processed through a custom
+                algorithm that mapped temporal changes and performance dynamics
+                to spatial coordinates within Echo.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="competition-highlight">
+          <p>
+            <strong>Technical Challenge:</strong> Working with vertical 9:16
+            competition videos presented unique challenges including varying
+            video quality, inconsistent camera angles, and background
+            distractions. Custom preprocessing techniques were developed to
+            normalize the footage before motion tracking.
+          </p>
+        </div>
+      </section>
+
+      <section id="documentation">
+        <h2>Documentation</h2>
+        <p>
+          Throughout the Echo project, I documented each stage of development,
+          from initial competition video selection to the final installation:
+        </p>
+
+        <div class="grid">
+          <div class="card">
+            <img
+              src="/api/placeholder/400/200"
+              alt="Competition video analysis"
+              class="card-image"
+            />
+            <div class="card-content">
+              <h3>Competition Analysis</h3>
+              <p>
+                Detailed breakdown of selected vertical competition
+                performances, including notation of key moments, technical
+                elements, and emotional peaks that informed Echo's design.
+              </p>
+            </div>
+          </div>
+          <div class="card">
+            <img
+              src="/api/placeholder/400/200"
+              alt="Acrylic bending documentation"
+              class="card-image"
+            />
+            <div class="card-content">
+              <h3>Acrylic Fabrication</h3>
+              <p>
+                Detailed logs and experimental documentation of different heat
+                forming techniques, successful bending methods, and structural
+                solutions for complex shapes.
+              </p>
+            </div>
+          </div>
+          <div class="card">
+            <img
+              src="/api/placeholder/400/200"
+              alt="Research and development notes"
+              class="card-image"
+            />
+            <div class="card-content">
+              <h3>Research Journal</h3>
+              <p>
+                Explorations into movement theory, competitive dance aesthetics,
+                light art, and technical considerations that informed Echo's
+                direction.
+              </p>
+            </div>
+          </div>
+          <div class="card">
+            <img
+              src="/api/placeholder/400/200"
+              alt="Technical diagrams"
+              class="card-image"
+            />
+            <div class="card-content">
+              <h3>Technical Documentation</h3>
+              <p>
+                Detailed schematics, wiring diagrams, and code examples used to
+                translate competition movements into LED patterns, including the
+                complete Arduino codebase.
+              </p>
+            </div>
+          </div>
+          <div class="card">
+            <img
+              src="/api/placeholder/400/200"
+              alt="Viewer reactions"
+              class="card-image"
+            />
+            <div class="card-content">
+              <h3>Reception Analysis</h3>
+              <p>
+                Observations and feedback from viewers (including fellow dancers
+                and competition judges) engaging with Echo, documenting the
+                range of interpretations and experiences.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="competition-highlight">
+          <p>
+            <strong>Comparative Documentation:</strong> Side-by-side
+            presentations of original vertical competition footage and the
+            resulting LED patterns demonstrate how specific dance elements were
+            translated into Echo's sculptural medium.
+          </p>
+        </div>
+      </section>
+
+      <section id="gallery">
+        <h2>Gallery</h2>
+        <p>
+          Visual documentation of the finished Echo sculpture and its
+          installation:
+        </p>
+
+        <div class="grid">
+          <div class="card">
+            <img
+              src="/api/placeholder/400/200"
+              alt="Echo sculpture in daylight"
+              class="card-image"
+            />
+            <div class="card-content">
+              <h3>Daylight View</h3>
+              <p>
+                Echo's sculptural form visible in natural lighting conditions,
+                showing the physical pathways derived from competition
+                choreography.
+              </p>
+            </div>
+          </div>
+          <div class="card">
+            <img
+              src="/api/placeholder/400/200"
+              alt="Echo with LED illumination"
+              class="card-image"
+            />
+            <div class="card-content">
+              <h3>LED Illumination</h3>
+              <p>
+                Echo activated and displaying the full competition dance
+                sequence through light patterns.
+              </p>
+            </div>
+          </div>
+          <div class="card">
+            <img
+              src="/api/placeholder/400/200"
+              alt="Side by side comparison with competition video"
+              class="card-image"
+            />
+            <div class="card-content">
+              <h3>Video Comparison</h3>
+              <p>
+                Split-screen presentation showing the original vertical
+                competition performance alongside the corresponding light
+                patterns in Echo.
+              </p>
+            </div>
+          </div>
+          <div class="card">
+            <img
+              src="/api/placeholder/400/200"
+              alt="Long-exposure photography of Echo"
+              class="card-image"
+            />
+            <div class="card-content">
+              <h3>Time Exposure</h3>
+              <p>
+                Long-exposure photography capturing Echo's complete light
+                sequence of a competition routine in a single image.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 [Your Name] | Echo: Senior Capstone Project</p>
+      <p>Department of [Your Department] | [Your University]</p>
+    </footer>
+  </body>
+</html>
