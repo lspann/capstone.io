@@ -133,6 +133,13 @@
         object-fit: cover;
       }
 
+      .card-video-container {
+        width: 100%;
+        height: 300px; /* Make it taller */
+        position: relative;
+        overflow: hidden;
+      }
+
       .card-content {
         padding: 1.5rem;
       }
@@ -180,7 +187,7 @@
       /* Updated for vertical videos */
       .vertical-video {
         padding-top: 177.78%; /* 9:16 Aspect Ratio */
-        max-width: 450px;
+        max-width: 350px;
         margin: 0 auto;
       }
 
@@ -359,11 +366,15 @@
             </div>
           </div>
           <div class="card">
-            <img
-              src="Documentation/MotionCapture.mp4"
-              alt="Original competition dance video"
-              class="card-image"
-            />
+            <div class="card-video-container">
+              <video class="card-video" autoplay loop muted>
+                <source
+                  src="Documentation/MotionCapture.mp4"
+                  type="video/mp4"
+                />
+                Your browser does not support the video tag.
+              </video>
+            </div>
             <div class="card-content">
               <h3>Source Material</h3>
               <p>
