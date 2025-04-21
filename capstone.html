@@ -135,9 +135,21 @@
 
       .card-video-container {
         width: 100%;
-        height: 300px; /* Make it taller */
+        height: 0;
+        padding-bottom: 177.78%;
         position: relative;
         overflow: hidden;
+        background-color: #000;
+      }
+
+      .card-video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
       }
 
       .card-content {
@@ -367,7 +379,7 @@
           </div>
           <div class="card">
             <div class="card-video-container">
-              <video class="card-video" autoplay loop muted>
+              <video class="card-video" autoplay loop muted playsinline>
                 <source
                   src="Documentation/MotionCapture.mp4"
                   type="video/mp4"
