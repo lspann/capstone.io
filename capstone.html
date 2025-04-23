@@ -198,9 +198,10 @@
 
       /* Updated for vertical videos */
       .vertical-video {
-        padding-top: 177.78%; /* 9:16 Aspect Ratio */
-        max-width: 350px;
+        padding-top: 50%; /* 9:16 Aspect Ratio */
+        max-width: auto;
         margin: 0 auto;
+        background-color: transparent;
       }
 
       .horizontal-video {
@@ -216,6 +217,7 @@
         width: 100%;
         height: 100%;
         border: none;
+        object-fit: contain;
       }
 
       .competition-highlight {
@@ -263,7 +265,17 @@
         height: 20px;
         width: 20px;
         border-radius: 50%;
-        background-color: var(--primary-color);
+        background-color: transparent;
+      }
+
+      .timeline-item .video-container.vertical-video {
+        background-color: transparent;
+        margin: 1rem auto;
+      }
+
+      .timeline-item .responsive-iframe {
+        background-color: transparent;
+        object-fit: contain;
       }
 
       .video-grid {
@@ -395,8 +407,8 @@
             <div class="card-content">
               <h3>Source Material</h3>
               <p>
-                Multiple vertical competition videos from different venues
-                captured my performances across various styles and
+                Multiple vertical competition videos from different dance
+                compeitions captured my performances across various genres and
                 choreographies.
               </p>
             </div>
@@ -415,11 +427,11 @@
           <div class="timeline-item">
             <h3>Monterey SwingFest 2025 - 2nd Place</h3>
             <p>
-              Contemporary solo performance featuring extended floor work and
-              aerial movements that create distinctive motion patterns.
+              A Jack N Jill West Coast Swing competition where we were paired
+              randomly to a random song.
             </p>
             <div class="video-container vertical-video">
-              <iframe
+              <video
                 class="responsive-iframe"
                 autoplay
                 loop
@@ -428,27 +440,31 @@
                 src="Documentation/MotionTrack1.mp4"
                 frameborder="0"
                 allowfullscreen
-              ></iframe>
+              ></video>
               <p class="caption">
-                Video placeholder for Regional Championships solo
+                Video placeholder for Monterey SwingFest video
               </p>
             </div>
           </div>
 
           <div class="timeline-item">
-            <h3>National Finals (2024)</h3>
+            <h3>Rose City Swing 2025 - 4th Place</h3>
             <p>
-              Jazz trio with synchronized movement sequences and complex spatial
-              formations that translate powerfully to 3D representation.
+              A Jack N Jill West Coast Swing Competition where we were paired
+              randomly to a random song.
             </p>
             <div class="video-container vertical-video">
-              <iframe
+              <video
+                autoplay
+                loop
+                muted
+                playsinline
                 class="responsive-iframe"
-                src="about:blank"
+                src="Documentation/MotionCapture.mp4"
                 frameborder="0"
                 allowfullscreen
-              ></iframe>
-              <p class="caption">Video placeholder for National Finals trio</p>
+              ></video>
+              <p class="caption">Video placeholder for Rose City Swing video</p>
             </div>
           </div>
 
